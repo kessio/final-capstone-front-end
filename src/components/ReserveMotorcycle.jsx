@@ -1,14 +1,76 @@
-import React from 'react'
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addReservation } from "../redux/reservationActions";
+import axios from "axios";
 
-function ReserveMotorcycle() {
+const ReserveMotorcycle = () => {
+  const [date, setDate] = useState("");
+  const [city, setCity] = useState("");
+  const [item, setItem] = useState("");
+  const [username, setUsername] = useState("");
+  const dispatch = useDispatch();
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const reservation = {
+      date,
+      city,
+      item,
+      username,
+    };
+    axios
+      .post("/reservations", { reservation })
+      .then((response) => {
+        dispatch(addReservation(response.data));
+        setDate("");
+        setCity("");
+        setItem("");
+        setUsername("");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div>
-        <h2>ReserveMotorcycle page</h2>
-        <p>To reserve an appointment, the user has to select a date and city (username and selected item are autofilled).
-           Use the design based on the "Book a vespa test-ride" and add all necessary inputs.
-           The user can also access the "Reserve" page from the navigation panel. In that case only username is autofilled.</p>
-    </div>
-  )
-}
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="date">Date:</label>
+        <input
+          type="datetime-local"
+          id="date"
+          value={date}
+          onChange={(event) => setDate(event.target.value)}
+        />
 
-export default ReserveMotorcycle
+        <label htmlFor="city">City:</label>
+        <input
+          type="text"
+          id="city"
+          value={city}
+          onChange={(event) => setCity(event.target.value)}
+        />
+
+        <label htmlFor="item">Item:</label>
+        <input
+          type="text"
+          id="item"
+          value={item}
+          onChange={(event) => setItem(event.target.value)}
+        />
+
+        <label htmlFor="username">Username:</label>
+        <input
+          type="text"
+          id="username"
+          value={username}
+          onChange={(event) => setUsername(event.target.value)}
+        />
+
+        <button type="submit">Reserve</button>
+      </form>
+    </div>
+  );
+};
+
+export default ReserveMotorcycle;

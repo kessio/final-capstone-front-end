@@ -1,12 +1,24 @@
-import React from 'react'
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchReservations } from "../redux/reservationActions";
+import ReservationItem from "./ReservationItem";
 
-function MyReservations() {
+const MyReservation = () => {
+  const reservations = useSelector((state) => state.reservations);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchReservations());
+  }, [dispatch]);
+
   return (
     <div>
-        <h2>MyReservations Page</h2>
-        <p>When the user clicks the "My reservations" link in the navigation panel they can see a list of their reservations (with information about item name, date and city).</p>
+      <h1>My Reservations</h1>
+      {reservations.map((reservation) => (
+        <ReservationItem key={reservation.id} reservation={reservation} />
+      ))}
     </div>
-  )
-}
+  );
+};
 
-export default MyReservations
+export default MyReservation;
