@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import ReservationItem from './ReservationItem';
 
 const MyReservations = () => {
   const [reservations, setReservations] = useState([]);
@@ -17,6 +18,9 @@ const MyReservations = () => {
   return (
     <div>
       <h1>My Reservations</h1>
+      {reservations.map((reservation) => (
+        <ReservationItem key={reservation.id} reservation={reservation} />
+      ))}
     </div>
   );
 };
