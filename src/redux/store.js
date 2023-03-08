@@ -1,6 +1,8 @@
-import { createStore } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
 import reservationReducer from './reservationReducer';
 
-const store = createStore(reservationReducer);
+const store = configureStore({
+  reducer: reservationReducer,
+});
 
 export default store;

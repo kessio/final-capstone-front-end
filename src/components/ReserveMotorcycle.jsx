@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addReservation } from "../redux/reservationActions";
-import axios from "axios";
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import axios from 'axios';
+import { addReservation } from '../redux/reservationActions';
 
 const ReserveMotorcycle = () => {
-  const [date, setDate] = useState("");
-  const [city, setCity] = useState("");
-  const [item, setItem] = useState("");
-  const [username, setUsername] = useState("");
+  const [date, setDate] = useState('');
+  const [city, setCity] = useState('');
+  const [item, setItem] = useState('');
+  const [username, setUsername] = useState('');
   const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
@@ -19,13 +19,13 @@ const ReserveMotorcycle = () => {
       username,
     };
     axios
-      .post("/reservations", { reservation })
+      .post('/reservations', { reservation })
       .then((response) => {
         dispatch(addReservation(response.data));
-        setDate("");
-        setCity("");
-        setItem("");
-        setUsername("");
+        setDate('');
+        setCity('');
+        setItem('');
+        setUsername('');
       })
       .catch((error) => {
         console.log(error);
