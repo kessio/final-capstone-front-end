@@ -1,19 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import ReservationItem from './ReservationItem';
+import { fetchReservations } from '../store/reservations/actions';
 
-const MyReservations = () => {
-  const [reservations, setReservations] = useState([]);
-
+const MyReservations = ({ reservations, dispatch }) => {
   useEffect(() => {
-    axios.get('/reservations')
-      .then((response) => {
-        setReservations(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+    dispatch(fetchReservations());
+  }, [dispatch]);
 
   return (
     <div>
