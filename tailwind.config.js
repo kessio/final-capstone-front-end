@@ -5,6 +5,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        'theme-color': '#97BF0F',
+
+      },
       fontFamily: {
         montserrat: ['Montserrat', 'sans-serif'],
         noto: ['Noto Serif TC', 'serif'],
