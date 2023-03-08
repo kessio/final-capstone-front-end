@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addReservation } from "../redux/reservationActions";
+import axios from "axios";
 
-const Reservation = () => {
-  const [date, setDate] = useState('');
-  const [city, setCity] = useState('');
-  const [item, setItem] = useState('');
-  const [username, setUsername] = useState('');
+const ReservationForm = () => {
+  const [date, setDate] = useState("");
+  const [city, setCity] = useState("");
+  const [item, setItem] = useState("");
+  const [username, setUsername] = useState("");
+  const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -16,9 +19,13 @@ const Reservation = () => {
       username,
     };
     axios
-      .post('/reservations', { reservation })
+      .post("/reservations", { reservation })
       .then((response) => {
-        console.log(response);
+        dispatch(addReservation(response.data));
+        setDate("");
+        setCity("");
+        setItem("");
+        setUsername("");
       })
       .catch((error) => {
         console.log(error);
@@ -66,4 +73,4 @@ const Reservation = () => {
   );
 };
 
-export default Reservation;
+export default ReservationForm;
