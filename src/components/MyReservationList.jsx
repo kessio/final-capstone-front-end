@@ -1,8 +1,12 @@
-import React, { useEffect } from 'react';
-import ReservationItem from './ReservationItem';
-import { fetchReservations } from '../store/reservations/actions';
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchReservations } from "../redux/reservationActions";
+import ReservationItem from "./ReservationItem";
 
-const MyReservations = ({ reservations, dispatch }) => {
+const MyReservationsList = () => {
+  const reservations = useSelector((state) => state.reservations);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(fetchReservations());
   }, [dispatch]);
@@ -17,4 +21,4 @@ const MyReservations = ({ reservations, dispatch }) => {
   );
 };
 
-export default MyReservations;
+export default MyReservationsList;
