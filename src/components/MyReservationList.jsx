@@ -1,14 +1,11 @@
 import React, { useEffect } from 'react';
-import axios from 'axios';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { fetchReservations } from '../store/actions';
 import ReservationItem from './ReservationItem';
+import { fetchReservations } from '../store/reservations/actions';
 
-const MyReservationsList = ({ reservations, fetchReservations }) => {
+const MyReservations = ({ reservations, dispatch }) => {
   useEffect(() => {
-    fetchReservations();
-  }, []);
+    dispatch(fetchReservations());
+  }, [dispatch]);
 
   return (
     <div>
@@ -20,23 +17,4 @@ const MyReservationsList = ({ reservations, fetchReservations }) => {
   );
 };
 
-MyReservationsList.propTypes = {
-  reservations: PropTypes.arrayOf(
-    PropTypes.shape({
-      date: PropTypes.string.isRequired,
-      city: PropTypes.string.isRequired,
-      item: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  fetchReservations: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  reservations: state.reservations,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  fetchReservations: () => dispatch(fetchReservations()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(MyReservationsList);
+export default MyReservations;

@@ -1,10 +1,6 @@
-import { createStore, combineReducers } from 'redux';
-import reservationsReducer from './reservationsReducer';
+import { createStore } from "redux";
+import reservationReducer from "./reservationReducer";
 
-const rootReducer = combineReducers({
-  reservations: reservationsReducer,
-});
-
-const store = createStore(rootReducer);
+const store = createStore(reservationReducer);
 
 export default store;
