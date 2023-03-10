@@ -1,13 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
+import motorcyclesReducers from './motorcycles/motorcycles'
 
-const rootReducer = () => {
-// Add reducer here
-
-};
 
 const store = configureStore({
   reducer: {
-    rootReducer,
+    motorcycles: motorcyclesReducers,
   },
 });
 

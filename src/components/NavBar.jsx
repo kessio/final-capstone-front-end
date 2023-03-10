@@ -9,10 +9,10 @@ function NavBar() {
    <div className=''>
     <div className='md:hidden flex justify-between m-2'>
       <div onClick={() => setNav(!nav)}><FaBars size={30} color={'green'} /></div>
-      <div className='w-10 h-10'><img src={logo} alt="logo-image" class='object-contain' /></div>
+      <div className='w-10 h-10'><img src={logo} alt="logo" className='object-contain' /></div>
     </div>
     <div className='hidden md:block fixed top-0 bottom-0 p-2 w-[200px] overflow-y-auto text-center bg-white shadow h-screen border-r-3 border-gray-400'>
-    <div className='w-44 pt-8 flex justify-center items-center'><img src={logo} alt="logo-image" class='w-32' /></div>
+    <div className='w-44 pt-8 flex justify-center items-center'><img src={logo} alt="logo" className='w-32' /></div>
     <ul className='mt-30 font-montserrat font-bold text-left text-font-color pl-2'>
       <li className='my-7'><NavLink to="/">HOME</NavLink></li>
       <li className='my-7'><NavLink to="/reserve">RESERVE</NavLink></li>
