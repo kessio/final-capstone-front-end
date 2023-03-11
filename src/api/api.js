@@ -1,67 +1,105 @@
-import axios from 'axios';
+const baseURL = 'http://localhost:3000/api/v1';
 
-const END_POINT = 'http://localhost:3000/api/v1';
+const setAuthToken = (headers) => localStorage.setItem('token', headers.Authorization);
+const unsetAuthToken = () => localStorage.removeItem('token');
 
-// eslint-disable-next-line import/prefer-default-export
-export const baseApi = axios.create({
-  baseURL: `${END_POINT}`,
+const loginOptions = (user) => ({
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(user),
 });
 
-// error handling
-const handleError = (error) => {
-  if (error.response) {
-    switch (error.response.status) {
-      case 400:
-        console.error('Bad Request');
-        break;
-      case 401:
-        console.error('Unauthorized');
-        break;
-      case 403:
-        console.error('Forbidden');
-        break;
-      case 404:
-        console.error('Not Found');
-        break;
-      default:
-        console.error('Server Error');
+const registerOptions = (user) => ({
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(user),
+});
+
+const logoutOptions = () => ({
+  method: 'DELETE',
+  headers: { Authorization: localStorage.getItem('token') },
+});
+
+const api = {
+  register: async (user) => {
+    const response = await fetch(`${baseURL}/register`, {
+      ...registerOptions({ user }),
+    });
+
+    const { status: code } = response;
+
+    if (code === 200) setAuthToken(response);
+
+    const data = await response.json();
+    return data;
+  },
+  login: async (user) => {
+    const response = await fetch(`${baseURL}/login`, {
+      ...loginOptions({ user }),
+    });
+
+    const { status: code } = response;
+
+    if (code === 200) setAuthToken(response);
+
+    const data = await response.json();
+    return data;
+  },
+  logout: async () => {
+    const response = await fetch(`${baseURL}/logout`, {
+      ...logoutOptions(),
+    });
+
+    const { status: code } = response;
+
+    if (code === 200) {
+      unsetAuthToken();
+      const data = await response.json();
+      return {
+        user: {},
+        status: 'successful',
+        message: data.message,
+      };
     }
-  } else {
-    console.error('Network Error');
-  }
+    if (code === 500) {
+      unsetAuthToken();
+      return {
+        user: {},
+        status: 'Unauthorized, You must Login or Register',
+        message: 'Session for User has expired',
+      };
+    }
+
+    return null;
+  },
+  fetchAuthUser: async () => {
+    const response = await fetch(`${baseURL}/users`, {
+      headers: { Authorization: localStorage.getItem('token') },
+    });
+
+    const { status: code } = response;
+
+    if (code === 401) {
+      unsetAuthToken();
+      return {
+        user: {},
+        status: 'expired',
+        error: 'Unauthorized, You must Login or Register',
+        message: 'Session for User has expired',
+      };
+    }
+
+    if (code === 200) {
+      const currentUser = await response.json();
+      return {
+        user: currentUser,
+        status: 'successfull',
+        error: null,
+        message: 'User is authenticated',
+      };
+    }
+    return null;
+  },
 };
 
-// function that allows a user to register
-export const signup = async (newuser) => {
-  try {
-    const useradd = { user: newuser };
-    const response = await baseApi.post('/auth/signup', useradd);
-    const authToken = response.headers.authorization;
-    const currentUser = response.data;
-    return { authToken, currentUser };
-  } catch (error) {
-    handleError(error);
-  }
-  return newuser;
-};
-
-export const login = async (newuser) => {
-  const useradd = { user: newuser };
-  const response = await baseApi.post('/auth/login', useradd);
-  const authToken = response.headers.authorization;
-  const currentUser = response.data.data;
-  return { authToken, currentUser };
-};
-
-export const logout = async () => {
-  const token = localStorage.getItem('token');
-  await baseApi.delete('/auth/logout', {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `${token}`,
-    },
-  });
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
-  return token;
-};
+export default api;

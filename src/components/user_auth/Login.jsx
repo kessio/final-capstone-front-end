@@ -4,37 +4,50 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { LockClosedIcon } from '@heroicons/react/20/solid';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { userLogin } from '../../redux/Auth/auth';
+import { signin } from '../../redux/Auth/authSlice';
+import useToken from '../../redux/Auth/useToken';
 import logo from '../../images/logo/logo.png';
 
 export default function Login() {
-  const navigate = useNavigate();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [user, setUser] = useState({});
   const [usernameError, setUsernameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  // const status = useSelector(allStatus);
+  // const message = useSelector(allMessages);
 
   const dispatch = useDispatch();
+  const isTokenSet = useToken();
+  const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (!username) {
-      setUsernameError('Username is required');
-    } else {
-      setUsernameError('');
-    }
-    if (!password) {
-      setPasswordError('Password is required');
-    } else {
-      setPasswordError('');
-    }
+  const handlechange = (e) => {
+    const {
+      target: { name: input, value },
+    } = e;
+    setUser({ ...user, [input]: value });
 
-    dispatch(userLogin(username, password, navigate));
+    // Reset username error when input is changed
+    if (input === 'email') setUsernameError('');
+    // Reset password error when input is changed
+    if (input === 'password') setPasswordError('');
   };
+
+  // const handleSignIn = () => dispatch(signin(user));
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Validate form fields before dispatching signin action
+    if (!user.email) setUsernameError('Email is required');
+    if (!user.password) setPasswordError('Password is required');
+    if (user.email && user.password) dispatch(signin(user));
+  };
+
+  useEffect(() => {
+    if (isTokenSet) navigate('/');
+  }, [isTokenSet]);
 
   return (
     <>
@@ -64,7 +77,7 @@ export default function Login() {
                   name="email"
                   type="email"
                   autoComplete="email"
-                  onChange={(event) => setUsername(event.target.value)}
+                  onChange={handlechange}
                   required
                   className="block w-full rounded-md border-0 py-2 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-focus-color sm:text-sm sm:leading-6 mb-6"
                   placeholder="Email address"
@@ -83,7 +96,7 @@ export default function Login() {
                   name="password"
                   type="password"
                   autoComplete="current-password"
-                  onChange={(event) => setPassword(event.target.value)}
+                  onChange={handlechange}
                   required
                   className="block w-full rounded-md border-0 py-2 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-focus-color sm:text-sm sm:leading-6 mb-6"
                   placeholder="Password"
