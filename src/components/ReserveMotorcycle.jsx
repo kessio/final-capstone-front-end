@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
+import api from './api';
 import { addReservation } from '../redux/reservationActions';
 
 const ReserveMotorcycle = () => {
@@ -10,6 +11,17 @@ const ReserveMotorcycle = () => {
   const [username, setUsername] = useState('');
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    axios
+      .get("https://fakestoreapi.com/products/category/motorcycle")
+      .then((response) => {
+        setProducts(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     const reservation = {
