@@ -89,4 +89,4 @@ const AddMotorcycle = () => {
   )
 }
 
-export default AddMotorcycle
+export default AddMotorcycle;
