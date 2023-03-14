@@ -8,6 +8,7 @@ export const postData = createAsyncThunk('form/postData', async  (formData) =>{
         method: 'POST',
         body: formData
       });
+      console.log("Formdata:", formData)
       const data = await response.json();
       console.log(data)
       return data;

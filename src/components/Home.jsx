@@ -13,7 +13,7 @@ function Home() {
 
   return (
     <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full'>
-      <div className='flex shadow hover:shadow-md w-full bg-white rounded-lg overflow-hidden cursor-pointer'>
+      <div className="md:grid md:grid-cols-3 md:gap-6 md:ml-60">
     {motorcycle && motorcycle.message ? (
       motorcycle.message.map((url) => (
           <img src={url} key={url} alt='dogs' className='object-cover w-full h-48'/>

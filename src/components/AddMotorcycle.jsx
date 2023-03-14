@@ -4,16 +4,20 @@ import { postData } from '../redux/addItem/addItem';
 
 const AddMotorcycle = () => {
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState(null);
+  //const [formData, setFormData] = useState(null);
   const handleSubmit = (event) => {
     event.preventDefault();
     const form = event.target;
     const formData = new FormData();
-    formData.append('name', form.name.value);
-    formData.append('city', form.city.value);
-    formData.append('image', form.image.files[0]);
+    if (form.name.value && form.description.value && form.price.value && form.model.value && form.image.files[0]) {
+      formData.append('motorcycle[name]', form.name.value);
+      formData.append('motorcycle[description]', form.description.value);
+      formData.append('motorcycle[price]', form.price.value);
+      formData.append('motorcycle[model]', form.model.value);
+      formData.append('motorcycle[image]', form.image.files[0]);
+    }
     dispatch(postData(formData));
-    setFormData(formData);
+    //setFormData(formData);
   };
   return (
 <div>
@@ -24,6 +28,7 @@ const AddMotorcycle = () => {
         <div className="shadow sm:overflow-hidden sm:rounded-md md:mt-10">
           <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
             <div className="grid grid-cols-3 gap-6">
+
               <div className="col-span-3 sm:col-span-2">
                 <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">Name</label>
                 <div className="mt-2 flex rounded-md shadow-sm">
@@ -32,10 +37,24 @@ const AddMotorcycle = () => {
               </div>
 
               <div className="col-span-3 sm:col-span-2">
-                <label htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">City</label>
+                <label htmlFor="price" className="block text-sm font-medium leading-6 text-gray-900">Price</label>
                 <div className="mt-2 flex rounded-md shadow-sm">
-                  <input type="text" name="city" id="city" required className="block w-full flex-1 rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+                  <input type="text" name="price" id="price" required className="block w-full flex-1 rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
                 </div>
+              </div>
+
+              <div className="col-span-3 sm:col-span-2">
+                <label htmlFor="model" className="block text-sm font-medium leading-6 text-gray-900">Model</label>
+                <div className="mt-2 flex rounded-md shadow-sm">
+                  <input type="text" name="model" id="model" required className="block w-full flex-1 rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">Description</label>
+              <div className="mt-2">
+                <textarea id="description" name="description" rows="3" className="mt-1 block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:py-1.5 sm:text-sm sm:leading-6" placeholder="you@example.com"></textarea>
               </div>
             </div>
 
@@ -56,18 +75,12 @@ const AddMotorcycle = () => {
                 </div>
               </div>
             </div>
+            
           </div>
           <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
             <button type="submit" className="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Save</button>
           </div>
         </div>
-        {formData && (
-        <div>
-          <p>Name: {formData.get('name') || 'No name provided'}</p>
-          <p>City: {formData.get('city') || 'No city provided'}</p>
-          <p>Image: {formData.get('image') ? formData.get('image').name : 'No image provided'}</p>
-        </div>
-      )}
       </form>
     </div>
   </div>

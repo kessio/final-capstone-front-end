@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const apiUrl = "https://dog.ceo/api/breeds/image/random/9";
+const apiUrl = "http://localhost:3000/api/v1/motorcycles";
 
 export const getMotorcycles = createAsyncThunk('motorcycle/getMotorcycles', async () => {
     const response = await fetch(apiUrl)
     const data = await response.json();
-    console.log(data)
+    console.log(data.motorcycles)
     return data
 })
 
