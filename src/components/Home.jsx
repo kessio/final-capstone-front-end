@@ -31,7 +31,7 @@ function Home() {
               src={url}
               key={url}
               alt="dogs"
-              className="object-cover w-full h-48"
+              className="object-cover w-full h-48 rounded-md"
             />
           ))
         ) : (
