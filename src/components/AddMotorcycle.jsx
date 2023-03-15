@@ -1,10 +1,12 @@
-import React, { useState }from 'react';
-import { useDispatch } from 'react-redux';
-import { postData } from '../redux/addItem/addItem';
+import React, { useEffect }from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+import { addMotorcycle } from '../redux/addItem/addItem';
 
 const AddMotorcycle = () => {
   const dispatch = useDispatch();
-  //const [formData, setFormData] = useState(null);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const form = event.target;
