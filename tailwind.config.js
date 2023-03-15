@@ -8,7 +8,6 @@ module.exports = {
       colors: {
         'theme-color': '#97BF0F',
         'font-color': '#424242',
-
       },
       fontFamily: {
         montserrat: ['Montserrat', 'sans-serif'],
