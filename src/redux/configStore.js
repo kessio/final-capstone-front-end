@@ -8,7 +8,7 @@ import motorcycleReducer from './auth/homeSlice';
 const rootReducer = combineReducers({
   // Add reducer here
   auth: authSlice,
-  motorcycle: motorcycleReducer,
+  motorcycles: motorcycleReducer,
 
 });
 
