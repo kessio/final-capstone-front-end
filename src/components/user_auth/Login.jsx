@@ -122,9 +122,9 @@ export default function Login() {
               </div>
 
               <div className="text-sm">
-                <a href="#" className="font-medium text-button-color hover:text-button-hover-color">
+                <div className="font-medium text-button-color hover:text-button-hover-color">
                   Forgot your password?
-                </a>
+                </div>
               </div>
             </div>
 
@@ -141,10 +141,10 @@ export default function Login() {
             </div>
             <p className="mt-2 text-center text-sm text-gray-600">
               Or{' '}
-              <a href="#" className="font-medium text-button-color hover:text-button-hover-color">
+              <div className="font-medium text-button-color hover:text-button-hover-color">
                 <NavLink to="/"> Don't have an account? Signup   </NavLink>
 
-              </a>
+              </div>
             </p>
           </form>
         </div>
