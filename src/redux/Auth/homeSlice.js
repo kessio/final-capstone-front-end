@@ -173,5 +173,10 @@ const homeSlice = createSlice({
 export const {
   resetMotorState, resetAllMotorcycleState, setMessageEmpty, setStatusIdle,
 } = homeSlice.actions;
+export const availableMotorcycles = (state) => state.motorcycles.availableMotorcycles;
+export const allStatus = (state) => state.motorcycles.status;
+export const allMessages = (state) => state.motorcycles.message;
+export const motorcycle = (state) => state.motorcycles.motorcycles;
+export const allMotorcycle = (state) => state.motorcycles.allMotorcycles;
 
 export default homeSlice.reducer;
