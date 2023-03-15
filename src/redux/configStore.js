@@ -2,11 +2,13 @@ import { configureStore, combineReducers, getDefaultMiddleware } from '@reduxjs/
 // eslint-disable-next-line import/no-extraneous-dependencies
 import logger from 'redux-logger';
 import authSlice from './Auth/authSlice';
+import motorcycleReducer from './auth/homeSlice';
 
 // root Reducer
 const rootReducer = combineReducers({
   // Add reducer here
   auth: authSlice,
+  motorcycle: motorcycleReducer,
 
 });
 
