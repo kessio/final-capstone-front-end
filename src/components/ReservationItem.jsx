@@ -19,11 +19,11 @@ const ReservationItem = ({ reservation }) => (
 );
 
 ReservationItem.propTypes = {
-    reservation: PropTypes.shape({
-      date: PropTypes.string.isRequired,
-      city: PropTypes.string.isRequired,
-      item: PropTypes.string.isRequired,
-    }).isRequired,
-  };
+  reservation: PropTypes.shape({
+    date: PropTypes.string.isRequired,
+    city: PropTypes.string.isRequired,
+    item: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 export default ReservationItem;

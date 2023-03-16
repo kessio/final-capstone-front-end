@@ -7,6 +7,11 @@ module.exports = {
     extend: {
       colors: {
         'theme-color': '#97BF0F',
+        'button-color': '#97BF0F',
+        'icon-color': '#576D0D',
+        'focus-color': '#81A30D',
+        'icon-hover-color': '#607711',
+        'button-hover-color': '#B9E623',
         'font-color': '#424242',
 
       },
