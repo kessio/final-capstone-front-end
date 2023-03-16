@@ -214,6 +214,30 @@ const api = {
 
     return data;
   },
+  reserveMotorcycle: async (userId, reservations) => {
+    const response = await fetch(`${baseURL}/users/${userId}/reservation`, {
+      ...motorcycleReservationOptions({ reservations }),
+    });
+    const reservation = await response.json();
+    return reservation;
+  },
+  fetchReservations: async (userId) => {
+    const response = await fetch(`${baseURL}/users/${userId}/reservations`, {
+      headers: { Authorization: localStorage.getItem('token') },
+    });
+    const reservations = await response.json();
+    return reservations;
+  },
+  deleteReservation: async (userId, reservationId) => {
+    const response = await fetch(
+      `${baseURL}/users/${userId}/reservations/${reservationId}`,
+      {
+        ...removeReservationOptions(),
+      },
+    );
+    const data = await response.json();
+    return data;
+  },
 };
 
 // Export the api object for use in other files/modules
