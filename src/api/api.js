@@ -167,7 +167,7 @@ const api = {
   },
 
   fetchAvailableMotorcycles: async () => {
-    const response = await fetch(`${baseURL}/motorcyle`);
+    const response = await fetch(`${baseURL}/motorcycle`);
     const motorcycle = await response.json();
     return motorcycle;
   },
@@ -188,7 +188,7 @@ const api = {
   },
 
   addMotorcycle: async (motor) => {
-    const response = await fetch(`${baseURL}/motorcyles`, {
+    const response = await fetch(`${baseURL}/motorcycles`, {
       ...addMotorcycleOptions({ motor }),
     });
     const data = await response.json();
@@ -200,8 +200,8 @@ const api = {
         message: data.message,
       };
     }
-
     return data;
+    
   },
 };
 

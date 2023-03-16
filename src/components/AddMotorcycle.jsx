@@ -1,11 +1,32 @@
-import React, { useEffect }from 'react';
+import React, { useEffect, useState }from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
-import { addMotorcycle } from '../redux/addItem/addItem';
+import { addMotorcycle } from '../redux/Auth/homeSlice';
+import useToken from '../redux/Auth/useToken';
 
 const AddMotorcycle = () => {
+  const [formData, setFormData] = useState(null);
+  //const message = useSelector(allMessages);
+  //const status = useSelector(allStatus);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isTokenSet = useToken();
+
+  const handleAddMotorcycle = (motorcycle) => {
+    dispatch(addMotorcycle(motorcycle));
+  };
+
+  const checkAuthUser = () => {
+    if (!isTokenSet) navigate('/');
+  };
+
+  useEffect(() => {
+    checkAuthUser();
+  }, [isTokenSet, navigate]);
+
+  //const navigateDeletePage = () => {
+   // if (message === 'Motorcycle has been successfully created') navigate('/deleteitem');
+ // };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -17,10 +38,20 @@ const AddMotorcycle = () => {
       formData.append('motorcycle[price]', form.price.value);
       formData.append('motorcycle[model]', form.model.value);
       formData.append('motorcycle[image]', form.image.files[0]);
+      setFormData(formData);
     }
-    dispatch(postData(formData));
-    //setFormData(formData);
   };
+
+  useEffect(() => {
+    if (formData) {
+      handleAddMotorcycle(formData);
+    }
+  }, [formData]);
+
+ /* useEffect(() => {
+    navigateDeletePage();
+  }, [message]);
+  */
   return (
 <div>
 
