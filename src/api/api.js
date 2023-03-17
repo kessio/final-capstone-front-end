@@ -168,6 +168,7 @@ const api = {
 
   fetchAvailableMotorcycles: async () => {
     const response = await fetch(`${baseURL}/motorcyle`);
+    console.log(response);
     const motorcycle = await response.json();
     return motorcycle;
   },
