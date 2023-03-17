@@ -19,11 +19,11 @@ function App() {
 
   useEffect(() => {
     dispatch(getAvailableMotorcycle());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (isTokenSet) dispatch(getAuthenticatedUser());
-  }, []);
+  });
 
   return (
     <div>

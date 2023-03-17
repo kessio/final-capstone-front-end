@@ -14,7 +14,6 @@ const createHeaders = () => ({
   // define other common headers if needed
 });
 
-
 /*
   Define options for login, register and logout requests:
    - method: type of HTTP request method
@@ -166,7 +165,7 @@ const api = {
 
   fetchAvailableMotorcycles: async () => {
     const response = await fetch(`${baseURL}/motorcycles`);
-    console.log(response);
+    // console.log(response);
     const motorcycle = await response.json();
     return motorcycle;
   },
@@ -176,11 +175,9 @@ const api = {
     return motorcyle;
   },
   toggleMotorcycleAvailability: async (motorId, motor) => {
-    const response = await fetch(
-      `${baseURL}/motorcycles/${motorId}/availability`, {
-        ...toggleMotorcycleAvailabilityOptions(motor),
-      },
-    );
+    const response = await fetch(`${baseURL}/motorcycles/${motorId}/availability`, {
+      ...toggleMotorcycleAvailabilityOptions(motor),
+    });
 
     const data = await response.json();
     return data;
@@ -200,7 +197,6 @@ const api = {
       };
     }
     return data;
-    
   },
 };
 
