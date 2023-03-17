@@ -2,7 +2,7 @@
 const baseURL = 'http://localhost:3000/api/v1';
 
 // Set authentication token in localStorage with Authorization value
-const setAuthToken = (headers) => localStorage.setItem('token', headers.Authorization);
+const setAuthToken = ({ headers }) => localStorage.setItem('token', headers.get('Authorization'));
 
 // Remove authentication token from localStorage
 const unsetAuthToken = () => localStorage.removeItem('token');
@@ -13,6 +13,7 @@ const createHeaders = () => ({
   Authorization: localStorage.getItem('token'),
   // define other common headers if needed
 });
+
 
 /*
   Define options for login, register and logout requests:
