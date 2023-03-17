@@ -1,31 +1,36 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../api/api';
 
+const SHOW_MOTORCYCLES = 'SHOW_MOTORCYCLES';
+const SHOW_MOTORCYCLE = 'SHOW_MOTORCYCLE';
+const GET_OWNER_MOTORCYCLES = 'GET_OWNER_MOTORCYCLES';
+const ADD_MOTORCYCLE = 'ADD_MOTORCYCLE';
+const TOGGLE_MOTORCYCLE_AVAILABLITY = 'TOGGLE_MOTORCYCLE_AVAILABLITY';
+
 const initialState = {
   availableMotorcycles: [],
-  motorcycles: {},
+  motorcycle: {},
   allMotorcycles: [],
-  status: 'idle',
+  status: 'idle', // 'idle' | 'loading' | 'successfull' | 'failed'
   error: null,
 };
 
-export const getAvailableMotorcycles = createAsyncThunk('home/getAvailableMotorcyles', async () => {
+export const getAvailableMotorcycle = createAsyncThunk(SHOW_MOTORCYCLES, async () => {
   try {
     return await api.fetchAvailableMotorcycles();
   } catch (error) {
     return error.message;
   }
 });
-
-export const getMotorcycle = createAsyncThunk('home/getMotorcycle', async (id) => {
+export const getMotorcycle = createAsyncThunk(SHOW_MOTORCYCLE, async (id) => {
   try {
-    return await api.fetchMotorcycle(id);
+    return await api.fetchMotorcycles(id);
   } catch (error) {
     return error.message;
   }
 });
 
-export const addMotorcycle = createAsyncThunk('home/addMotorcycle', async (motor) => {
+export const addMotorcycle = createAsyncThunk(ADD_MOTORCYCLE, async (motor) => {
   try {
     return await api.addMotorcycle(motor);
   } catch (error) {
@@ -33,35 +38,37 @@ export const addMotorcycle = createAsyncThunk('home/addMotorcycle', async (motor
   }
 });
 
-export const getAllMotorcycles = createAsyncThunk('home/getAllMotorcycles', async () => {
+export const getAllMotorcycles = createAsyncThunk(GET_OWNER_MOTORCYCLES, async () => {
   try {
-    return await api.getAllMotorcycles();
+    return await api.fetchAllMotorcycles();
   } catch (error) {
     return error.message;
   }
 });
 
-export const toggleAvailability = createAsyncThunk('home/toggleAvailability', async ({ id, availability }) => {
-  const motor = { isAvailable: availability };
-  try {
-    return await api.toggleMotorcycleAvailability(id, motor);
-  } catch (error) {
-    return error.message;
-  }
-});
+export const toggleAvailability = createAsyncThunk(
+  TOGGLE_MOTORCYCLE_AVAILABLITY,
+  async ({ motorId, motor }) => {
+    try {
+      return await api.toggleMotorcycleAvailability(motorId, motor);
+    } catch (error) {
+      return error.message;
+    }
+  },
+);
 
-const homeSlice = createSlice({
-  name: 'Motorcycles',
+const motorcycleSlice = createSlice({
+  name: 'motorcycles',
   initialState,
   reducers: {
-    resetMotorState: (state) => ({
+    resetMotorcycleState: (state) => ({
       ...state,
-      motorcycles: {},
+      motorcycle: {},
       status: 'idle',
       message: '',
       error: null,
     }),
-    resetAllMotorcycleState: (state) => ({
+    resetAllMotorcycleSState: (state) => ({
       ...state,
       allMotorcycles: [],
       status: 'idle',
@@ -80,16 +87,16 @@ const homeSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getAvailableMotorcycles.pending, (state) => ({
+      .addCase(getAvailableMotorcycle.pending, (state) => ({
         ...state,
         status: 'loading',
       }))
-      .addCase(getAvailableMotorcycles.fulfilled, (state, action) => ({
+      .addCase(getAvailableMotorcycle.fulfilled, (state, action) => ({
         ...state,
         availableMotorcycles: action.payload,
-        status: 'Successful',
+        status: 'successfull',
       }))
-      .addCase(getAvailableMotorcycles.rejected, (state, action) => ({
+      .addCase(getAvailableMotorcycle.rejected, (state, action) => ({
         ...state,
         status: 'failed',
         error: action.error.message,
@@ -100,7 +107,7 @@ const homeSlice = createSlice({
       }))
       .addCase(getMotorcycle.fulfilled, (state, action) => ({
         ...state,
-        motorcyle: action.payload,
+        motorcycle: action.payload,
         status: 'successfull',
       }))
       .addCase(getMotorcycle.rejected, (state, action) => ({
@@ -115,8 +122,9 @@ const homeSlice = createSlice({
       .addCase(addMotorcycle.fulfilled, (state, action) => ({
         ...state,
         availableMotorcycles: [
-          ...(action.payload.data.available
-            && action.payload.status === 201 ? [action.payload.data] : []),
+          ...(action.payload.data.available && action.payload.status === 201
+            ? [action.payload.data]
+            : []),
           ...state.availableMotorcycles,
         ],
         allMotorcycles: [
@@ -124,23 +132,9 @@ const homeSlice = createSlice({
           ...state.allMotorcycles,
         ],
         message: action.payload.message,
-        status: action.payload.status === 200 ? 'successful' : 'failed',
+        status: action.payload.status === 200 ? 'successfull' : 'failed',
       }))
       .addCase(addMotorcycle.rejected, (state, action) => ({
-        ...state,
-        status: 'failed',
-        error: action.error.message,
-      }))
-      .addCase(getAllMotorcycles.pending, (state) => ({
-        ...state,
-        status: 'loading',
-      }))
-      .addCase(getAllMotorcycles.fulfilled, (state, action) => ({
-        ...state,
-        allMotorcycles: action.payload,
-        status: 'successful',
-      }))
-      .addCase(getAllMotorcycles.rejected, (state, action) => ({
         ...state,
         status: 'failed',
         error: action.error.message,
@@ -153,16 +147,32 @@ const homeSlice = createSlice({
         ...state,
         availableMotorcycles: [
           ...(action.payload.data.available ? [action.payload.data] : []),
-          ...state.availableMotorcycles.filter(({ id }) => id !== action.payload.data.id),
+          ...state.availableMotorcycles.filter(
+            ({ id }) => id !== action.payload.data.id,
+          ),
         ],
         allMotorcycles: [
           action.payload.data,
           ...state.allMotorcycles.filter(({ id }) => id !== action.payload.data.id),
         ],
         message: action.payload.message,
-        status: 'successful',
+        status: 'successfull',
       }))
       .addCase(toggleAvailability.rejected, (state, action) => ({
+        ...state,
+        status: 'failed',
+        error: action.error.message,
+      }))
+      .addCase(getAllMotorcycles.pending, (state) => ({
+        ...state,
+        status: 'loading',
+      }))
+      .addCase(getAllMotorcycles.fulfilled, (state, action) => ({
+        ...state,
+        allMotorcycles: action.payload,
+        status: 'successfull',
+      }))
+      .addCase(getAllMotorcycles.rejected, (state, action) => ({
         ...state,
         status: 'failed',
         error: action.error.message,
@@ -171,12 +181,15 @@ const homeSlice = createSlice({
 });
 
 export const {
-  resetMotorState, resetAllMotorcycleState, setMessageEmpty, setStatusIdle,
-} = homeSlice.actions;
+  resetMotorcycleState,
+  resetAllMotorcycleSState,
+  setMessageEmpty,
+  setStatusIdle,
+} = motorcycleSlice.actions;
 export const availableMotorcycles = (state) => state.motorcycles.availableMotorcycles;
 export const allStatus = (state) => state.motorcycles.status;
 export const allMessages = (state) => state.motorcycles.message;
-export const motorcycle = (state) => state.motorcycles.motorcycles;
-export const allMotorcycle = (state) => state.motorcycles.allMotorcycles;
+export const motorcycle = (state) => state.motorcycles.motorcycle;
+export const allMotorcycles = (state) => state.motorcycles.allMotorcycles;
 
-export default homeSlice.reducer;
+export default motorcycleSlice.reducer;
