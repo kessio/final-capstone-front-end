@@ -16,9 +16,10 @@ const AddMotorcycle = () => {
     dispatch(addMotorcycle(motorcycle));
   };
 
-  const checkAuthUser = () => {
+ /* const checkAuthUser = () => {
     if (!isTokenSet) navigate('/');
   };
+  */
 
   useEffect(() => {
     checkAuthUser();
