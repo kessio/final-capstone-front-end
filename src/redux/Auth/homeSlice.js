@@ -11,7 +11,7 @@ const initialState = {
   availableMotorcycles: [],
   motorcycle: {},
   allMotorcycles: [],
-  status: 'idle', // 'idle' | 'loading' | 'successfull' | 'failed'
+  status: 'idle',
   error: null,
 };
 
