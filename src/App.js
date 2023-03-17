@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import NavBar from './components/NavBar';
 import Home from './components/Home';
+import DetailsPage from './components/detailsPage';
 import ReserveMotorcycle from './components/ReserveMotorcycle';
 import MyReservations from './components/MyReservations';
 import AddMotorcycle from './components/AddMotorcycle';
@@ -30,6 +31,7 @@ function App() {
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="motorcycles-details/:id" element={<DetailsPage />} />
         <Route path="/Signup" element={<Signup />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/reserve" element={<ReserveMotorcycle />} />
