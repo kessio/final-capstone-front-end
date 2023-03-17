@@ -74,9 +74,6 @@ const api = {
       ...registerOptions({ user }),
     });
 
-    console.log(response);
-    console.log(user);
-
     const { status: code } = response;
 
     if (code === 200) setAuthToken(response);
@@ -178,18 +175,19 @@ const api = {
   },
 
   fetchAvailableMotorcycles: async () => {
-    const response = await fetch(`${baseURL}/motorcyle`);
+    const response = await fetch(`${baseURL}/motorcycles`);
+    console.log(response);
     const motorcycle = await response.json();
     return motorcycle;
   },
   fetchMotorcycles: async (id) => {
-    const response = await fetch(`${baseURL}/motorcyle/${id}`);
+    const response = await fetch(`${baseURL}/motorcycles/${id}`);
     const motorcyle = response.json();
     return motorcyle;
   },
   toggleMotorcycleAvailability: async (motorId, motor) => {
     const response = await fetch(
-      `${baseURL}/motorcycle/${motorId}/availability`, {
+      `${baseURL}/motorcycles/${motorId}/availability`, {
         ...toggleMotorcycleAvailabilityOptions(motor),
       },
     );
@@ -199,7 +197,7 @@ const api = {
   },
 
   addMotorcycle: async (motor) => {
-    const response = await fetch(`${baseURL}/motorcyles`, {
+    const response = await fetch(`${baseURL}/motorcycles`, {
       ...addMotorcycleOptions({ motor }),
     });
     const data = await response.json();

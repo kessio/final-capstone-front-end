@@ -2,7 +2,7 @@ import { configureStore, combineReducers, getDefaultMiddleware } from '@reduxjs/
 // eslint-disable-next-line import/no-extraneous-dependencies
 import logger from 'redux-logger';
 import authSlice from './Auth/authSlice';
-import motorcycleReducer from './auth/homeSlice';
+import motorcycleReducer from './Auth/homeSlice';
 
 // root Reducer
 const rootReducer = combineReducers({
@@ -13,11 +13,11 @@ const rootReducer = combineReducers({
 });
 
 // Redux store
-const store = configureStore({
-  reducer: {
-    rootReducer,
+const store = configureStore(
+  {
+    reducer: rootReducer,
+    middleware: [...getDefaultMiddleware(), logger],
   },
-  middleware: [...getDefaultMiddleware(), logger],
-});
+);
 
 export default store;
