@@ -2,7 +2,7 @@
 const baseURL = 'http://localhost:3000/api/v1';
 
 // Set authentication token in localStorage with Authorization value
-const setAuthToken = (headers) => localStorage.setItem('token', headers.Authorization);
+const setAuthToken = ({ headers }) => localStorage.setItem('token', headers.get('Authorization'));
 
 // Remove authentication token from localStorage
 const unsetAuthToken = () => localStorage.removeItem('token');
@@ -165,7 +165,7 @@ const api = {
 
   fetchAvailableMotorcycles: async () => {
     const response = await fetch(`${baseURL}/motorcycles`);
-    console.log(response);
+    // console.log(response);
     const motorcycle = await response.json();
     return motorcycle;
   },
@@ -175,11 +175,9 @@ const api = {
     return motorcyle;
   },
   toggleMotorcycleAvailability: async (motorId, motor) => {
-    const response = await fetch(
-      `${baseURL}/motorcycles/${motorId}/availability`, {
-        ...toggleMotorcycleAvailabilityOptions(motor),
-      },
-    );
+    const response = await fetch(`${baseURL}/motorcycles/${motorId}/availability`, {
+      ...toggleMotorcycleAvailabilityOptions(motor),
+    });
 
     const data = await response.json();
     return data;
@@ -198,7 +196,6 @@ const api = {
         message: data.message,
       };
     }
-
     return data;
   },
 };
