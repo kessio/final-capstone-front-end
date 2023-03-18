@@ -4,8 +4,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { selectavailableMotorcycles } from '../redux/Auth/homeSlice';
-///import { fetchItems } from '../redux/items/displayItemsSlice';
+import bike from '../images/bike.png';
+import { availableMotorcycles } from '../redux/Auth/homeSlice';
 
 const Home = () => {
   //const dispatch = useDispatch();
@@ -15,16 +15,30 @@ const Home = () => {
 
 
   return (
-    <div className="bg-gray-100 min-h-screen flex flex-col justify-center items-center">
-      <h1 className="text-4xl font-bold mb-4">Motorcycle Rentals</h1>
+    <div
+      className="min-h-screen flex flex-col items-center bg-gray-100
+    @screen lg:ml-56 mt-0"
+    >
+      <div className="bg-gray-100 w-full mb-10">
+        <div
+          className="
+        w-full bg-cover bg-no-repeat h-96
+        align-middle justify-center
+        flex-col
+        flex items-center text-center"
+          style={{ backgroundImage: `url(${bike})` }}
+        >
+          <h1 className="text-white text-5xl font-bold ">welcome to Tagie</h1>
+        </div>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {bikes.map((motorcycle) => (
           <div
             key={motorcycle.id}
-            className="bg-white rounded-lg p-4 shadow-md flex flex-col justify-between"
+            className="bg-white rounded-lg p-4 shadow-md flex flex-col justify-between cursor-pointer"
             onClick={() => navigate(`/motorcycles-details/${motorcycle.id}`)}
           >
-            <img src={motorcycle.image} />
+            <img className="w-48 mx-auto" src={motorcycle.image} />
             <div>
               <h2 className="text-2xl font-bold mb-2">{motorcycle.name}</h2>
               <p className="mb-2">

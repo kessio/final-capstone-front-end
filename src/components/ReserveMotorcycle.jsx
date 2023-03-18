@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { reserveItem } from '../redux/reserveItems';
+import { reserveItem } from '../redux/reserveItems/reserveItemSlice';
 
 function ReserveMotorcycle({ user_id }) {
 
