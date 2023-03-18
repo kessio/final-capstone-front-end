@@ -4,6 +4,7 @@ import logger from 'redux-logger';
 import authSlice from './Auth/authSlice';
 import motorcycleReducer from './Auth/homeSlice';
 import itemsReducer from './items/addItemSlice';
+import reserveReducer from './reserveItems/reserveItemSlice';
 
 // root Reducer
 const rootReducer = combineReducers({
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   auth: authSlice,
   motorcycle: motorcycleReducer,
   items: itemsReducer,
+  reserveItems: reserveReducer,
 
 });
 
