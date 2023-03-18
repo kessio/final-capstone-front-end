@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import bike from '../images/bike.png';
 import { availableMotorcycles } from '../redux/Auth/homeSlice';
 
-const Home = () => {
+function Home() {
   const bikes = useSelector(availableMotorcycles);
   // const status = useSelector(allStatus);
   const navigate = useNavigate();
@@ -52,6 +52,6 @@ const Home = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Home;
