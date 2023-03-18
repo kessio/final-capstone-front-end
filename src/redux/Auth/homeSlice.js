@@ -186,7 +186,7 @@ export const {
   setMessageEmpty,
   setStatusIdle,
 } = motorcycleSlice.actions;
-export const availableMotorcycles = (state) => state.motorcycles.availableMotorcycles;
+export const selectavailableMotorcycles = (state) => state.motorcycles.availableMotorcycles;
 export const allStatus = (state) => state.motorcycles.status;
 export const allMessages = (state) => state.motorcycles.message;
 export const motorcycle = (state) => state.motorcycles.motorcycle;

@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addItem } from '../redux/addItem/addItemApiCall';
+import { addItem } from '../redux/items/addItemApiCall';
 
 function AddMotorcycle() {
   const dispatch = useDispatch();

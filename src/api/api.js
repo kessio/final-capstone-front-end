@@ -1,6 +1,6 @@
 // Declare the base URL for API requests
 const baseURL = 'http://localhost:3000/api/v1';
-const jwtToken = localStorage.getItem('token');
+// const jwtToken = localStorage.getItem('token');
 // Set authentication token in localStorage with Authorization value
 const setAuthToken = ({ headers }) => localStorage.setItem('token', headers.get('Authorization'));
 
@@ -120,16 +120,16 @@ const api = {
   },
 
   // Function for fetching authenticated user details from the server
-   fetchAuthUser : async () => {
+  fetchAuthUser: async () => {
     try {
       const response = await fetch(`${baseURL}/users`, {
-        headers: { Authorization: `Bearer ${jwtToken}` },
+        headers: { Authorization: localStorage.getItem('token') },
       });
-  
+
       if (!response.ok) {
         throw new Error('Unable to fetch authenticated user');
       }
-  
+
       const currentUser = await response.json();
       return {
         user: currentUser,
@@ -147,7 +147,7 @@ const api = {
       };
     }
   },
-  
+
   // Function for fetching all motorcycles from the server
   fetchAllMotorcycles: async () => {
     const response = await fetch(`${baseURL}/all_motorcycles`, {
