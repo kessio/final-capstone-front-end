@@ -1,6 +1,6 @@
 // Declare the base URL for API requests
 const baseURL = 'http://localhost:3000/api/v1';
-
+const jwtToken = localStorage.getItem('token');
 // Set authentication token in localStorage with Authorization value
 const setAuthToken = ({ headers }) => localStorage.setItem('token', headers.get('Authorization'));
 
@@ -120,15 +120,24 @@ const api = {
   },
 
   // Function for fetching authenticated user details from the server
-  fetchAuthUser: async () => {
-    const response = await fetch(`${baseURL}/users`, {
-      headers: { Authorization: localStorage.getItem('token') },
-    });
-
-    const { status: code } = response;
-
-    // If token is missing or invalid, remove token and display error message
-    if (code === 401) {
+   fetchAuthUser : async () => {
+    try {
+      const response = await fetch(`${baseURL}/users`, {
+        headers: { Authorization: `Bearer ${jwtToken}` },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Unable to fetch authenticated user');
+      }
+  
+      const currentUser = await response.json();
+      return {
+        user: currentUser,
+        status: 'successful',
+        error: null,
+        message: 'User is authenticated',
+      };
+    } catch (error) {
       unsetAuthToken();
       return {
         user: {},
@@ -137,20 +146,8 @@ const api = {
         message: 'Session for User has expired',
       };
     }
-
-    // If token is valid, return user data and message.
-    if (code === 200) {
-      const currentUser = await response.json();
-      return {
-        user: currentUser,
-        status: 'successfull',
-        error: null,
-        message: 'User is authenticated',
-      };
-    }
-    return null;
   },
-
+  
   // Function for fetching all motorcycles from the server
   fetchAllMotorcycles: async () => {
     const response = await fetch(`${baseURL}/all_motorcycles`, {

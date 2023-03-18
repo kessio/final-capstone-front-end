@@ -1,12 +1,30 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { addMotorcycle } from '../redux/Auth/homeSlice';
-import useToken from '../redux/Auth/useToken';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addItem } from '../redux/addItem/addItemApiCall';
 
 function AddMotorcycle() {
-  const [formData, setFormData] = useState(null);
+  const dispatch = useDispatch();
+
+  const [name, setName] = useState('');
+  const [model, setModel] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [image, setImage] = useState('');
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    dispatch(addItem({ name, model, description, price, image }));
+    setName('');
+    setModel('');
+    setDescription('');
+    setPrice('');
+    setImage('');
+  };
+
+
+
+ /* const [formData, setFormData] = useState(null);
   // const message = useSelector(allMessages);
   // const status = useSelector(allStatus);
   const dispatch = useDispatch();
@@ -76,6 +94,8 @@ function AddMotorcycle() {
                         type="text"
                         name="name"
                         id="name"
+                        value={name}
+                        onChange={(event) => setName(event.target.value)}
                         required
                         className="block w-full flex-1
                     rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset
@@ -87,14 +107,26 @@ function AddMotorcycle() {
                   <div className="col-span-3 sm:col-span-2">
                     <label htmlFor="price" className="block text-sm font-medium leading-6 text-gray-900">Price</label>
                     <div className="mt-2 flex rounded-md shadow-sm">
-                      <input type="number" name="price" id="price" required className="block w-full flex-1 rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                      <input 
+                      type="number" 
+                      name="price" 
+                      id="price" 
+                      value={price}
+                      onChange={(event) => setPrice(event.target.value)}
+                      required className="block w-full flex-1 rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
                   </div>
 
                   <div className="col-span-3 sm:col-span-2">
                     <label htmlFor="model" className="block text-sm font-medium leading-6 text-gray-900">Model</label>
                     <div className="mt-2 flex rounded-md shadow-sm">
-                      <input type="text" name="model" id="model" required className="block w-full flex-1 rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                      <input 
+                      type="text" 
+                      name="model" 
+                      id="model" 
+                      value={model}
+                      onChange={(event) => setModel(event.target.value)}
+                      required className="block w-full flex-1 rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
                   </div>
                 </div>
@@ -102,14 +134,26 @@ function AddMotorcycle() {
                 <div>
                   <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">Description</label>
                   <div className="mt-2">
-                    <textarea id="description" name="description" rows="3" className="mt-1 block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:py-1.5 sm:text-sm sm:leading-6" placeholder="you@example.com" />
+                    <textarea 
+                    id="description" 
+                    name="description" 
+                    value={description}
+                    onChange={(event) => setDescription(event.target.value)}
+                    rows="3" 
+                    className="mt-1 block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:py-1.5 sm:text-sm sm:leading-6" placeholder="you@example.com" />
                   </div>
                 </div>
 
                 <div className="col-span-3 sm:col-span-2">
                   <label htmlFor="image" className="block text-sm font-medium leading-6 text-gray-900">Image Url</label>
                   <div className="mt-2 flex rounded-md shadow-sm">
-                    <input type="text" name="image" id="image" required className="block w-full flex-1 rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                    <input 
+                    type="text" 
+                    name="image" 
+                    id="image" 
+                    value={image}
+                    onChange={(event) => setImage(event.target.value)}
+                    required className="block w-full flex-1 rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                   </div>
                 </div>
 
