@@ -27,8 +27,6 @@ function NavBar() {
         <li className='my-7'><NavLink to="/">HOME</NavLink></li>
         <li className='my-7'><NavLink to="/reserve">RESERVE</NavLink></li>
         <li className='my-7'><NavLink to="/myreservations">RESERVATIONS</NavLink></li>
-        <li className='my-7'><NavLink to="/additem">ADD</NavLink></li>
-        <li className='my-7'><NavLink to="/deleteitem">DELETE</NavLink></li>
       </ul>
       </div>
       {nav && (

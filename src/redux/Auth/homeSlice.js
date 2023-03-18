@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../../api/api';
+import { motorcycleAPI } from '../../api/api';
 
 const SHOW_MOTORCYCLES = 'SHOW_MOTORCYCLES';
 const SHOW_MOTORCYCLE = 'SHOW_MOTORCYCLE';
@@ -17,14 +17,14 @@ const initialState = {
 
 export const getAvailableMotorcycle = createAsyncThunk(SHOW_MOTORCYCLES, async () => {
   try {
-    return await api.fetchAvailableMotorcycles();
+    return await motorcycleAPI.getAvailable();
   } catch (error) {
     return error.message;
   }
 });
 export const getMotorcycle = createAsyncThunk(SHOW_MOTORCYCLE, async (id) => {
   try {
-    return await api.fetchMotorcycles(id);
+    return await motorcycleAPI.getById(id);
   } catch (error) {
     return error.message;
   }
@@ -32,7 +32,7 @@ export const getMotorcycle = createAsyncThunk(SHOW_MOTORCYCLE, async (id) => {
 
 export const addMotorcycle = createAsyncThunk(ADD_MOTORCYCLE, async (motor) => {
   try {
-    return await api.addMotorcycle(motor);
+    return await motorcycleAPI.add(motor);
   } catch (error) {
     return error.message;
   }
@@ -40,7 +40,7 @@ export const addMotorcycle = createAsyncThunk(ADD_MOTORCYCLE, async (motor) => {
 
 export const getAllMotorcycles = createAsyncThunk(GET_OWNER_MOTORCYCLES, async () => {
   try {
-    return await api.fetchAllMotorcycles();
+    return await motorcycleAPI.getAll();
   } catch (error) {
     return error.message;
   }
@@ -50,7 +50,7 @@ export const toggleAvailability = createAsyncThunk(
   TOGGLE_MOTORCYCLE_AVAILABLITY,
   async ({ motorId, motor }) => {
     try {
-      return await api.toggleMotorcycleAvailability(motorId, motor);
+      return await motorcycleAPI.toggleAvailability(motorId, motor);
     } catch (error) {
       return error.message;
     }

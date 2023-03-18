@@ -3,13 +3,14 @@ import { configureStore, combineReducers, getDefaultMiddleware } from '@reduxjs/
 import logger from 'redux-logger';
 import authSlice from './Auth/authSlice';
 import motorcycleReducer from './Auth/homeSlice';
+import reservationSlice from './reservationSlice';
 
 // root Reducer
 const rootReducer = combineReducers({
   // Add reducer here
   auth: authSlice,
   motorcycles: motorcycleReducer,
-
+  reservations: reservationSlice,
 });
 
 // Redux store

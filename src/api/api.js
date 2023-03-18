@@ -1,242 +1,112 @@
-// Declare the base URL for API requests
+import axios from 'axios';
+
 const baseURL = 'http://localhost:3000/api/v1';
 
-// Set authentication token in localStorage with Authorization value
-const setAuthToken = (headers) => localStorage.setItem('token', headers.Authorization);
+const setAuthToken = ({ headers }) => {
+  localStorage.setItem('token', headers.Authorization);
+};
 
-// Remove authentication token from localStorage
-const unsetAuthToken = () => localStorage.removeItem('token');
+const removeAuthToken = () => {
+  localStorage.removeItem('token');
+};
 
-// Function for creating HTTP headers with 'Authorization' value
 const createHeaders = () => ({
   'Content-Type': 'application/json',
   Authorization: localStorage.getItem('token'),
-  // define other common headers if needed
 });
 
-/*
-  Define options for login, register and logout requests:
-   - method: type of HTTP request method
-   - headers: content-type and authorization headers
-   - body: user data in JSON format
- */
+const createError = (status) => {
+  if (status === 401) return { message: 'Unauthorized. Please log in or register.' };
+  if (status === 403) return { message: 'Forbidden. You do not have permission to access this resource.' };
+  if (status === 404) return { message: 'Not Found. The resource you are looking for does not exist.' };
+  if (status >= 500) return { message: 'Something went wrong on our side. Please try again later.' };
+  return null; // a default return statement.
+};
 
-const loginOptions = (user) => ({
-  method: 'POST',
-  headers: createHeaders(),
-  body: JSON.stringify(user),
+const api = axios.create({ baseURL });
+
+api.interceptors.request.use((config) => {
+  const newConfig = {
+    ...config,
+    headers: createHeaders(),
+  };
+  return newConfig;
 });
 
-const registerOptions = (user) => ({
-  method: 'POST',
-  headers: createHeaders(),
-  body: JSON.stringify(user),
-});
-
-const logoutOptions = () => ({
-  method: 'DELETE',
-  headers: createHeaders(),
-});
-
-const toggleMotorcycleAvailabilityOptions = (motorcyles) => ({
-  method: 'PATCH',
-  headers: {
-    ...createHeaders(),
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const err = error.response;
+    const status = err ? err.status : 500;
+    throw createError(status);
   },
-  body: JSON.stringify(motorcyles),
-});
+);
 
-const addMotorcycleOptions = (motorcycle) => ({
-  method: 'POST',
-  headers: {
-    ...createHeaders(),
-  },
-  body: JSON.stringify(motorcycle),
-});
-
-const motorcycleReservationOptions = (reservation) => ({
-  method: 'POST',
-  headers: createHeaders(),
-  body: JSON.stringify(reservation),
-});
-
-const removeReservationOptions = () => ({
-  method: 'DELETE',
-  headers: { Authorization: localStorage.getItem('token') },
-});
-
-// Create an object named api containing methods for API requests used in application
-const api = {
-
-  // Function for user registration request to the server
-  register: async (user) => {
-    const response = await fetch(`${baseURL}/register`, {
-      ...registerOptions({ user }),
-    });
-
-    const { status: code } = response;
-
-    if (code === 200) setAuthToken(response);
-
-    const data = await response.json();
-    return data;
-  },
-
-  // Function for user login request to the server
+export const userAPI = {
   login: async (user) => {
-    const response = await fetch(`${baseURL}/login`, {
-      ...loginOptions({ user }),
-    });
-
-    console.log(user);
-
-    const { status: code } = response;
-
-    if (code === 200) setAuthToken(response);
-
-    const data = await response.json();
-    return data;
+    const res = await api.post('/login', JSON.stringify(user));
+    setAuthToken(res);
+    return res.data;
   },
 
-  // Function for user logout and token revocation request to the server
+  register: async (user) => {
+    const res = await api.post('/register', JSON.stringify(user));
+    setAuthToken(res);
+    return res.data;
+  },
+
   logout: async () => {
-    const response = await fetch(`${baseURL}/logout`, {
-      ...logoutOptions(),
-    });
-
-    const { status: code } = response;
-
-    // If logout successfull then remove token from storage, show message and empty the user object
-    if (code === 200) {
-      unsetAuthToken();
-      const data = await response.json();
-      return {
-        user: {},
-        status: 'successful',
-        message: data.message,
-      };
-    }
-
-    // If session has expired, remove token from storage and display a message
-    if (code === 500) {
-      unsetAuthToken();
-      return {
-        user: {},
-        status: 'Unauthorized, You must Login or Register',
-        message: 'Session for User has expired',
-      };
-    }
-
-    return null;
+    const res = await api.delete('/logout');
+    removeAuthToken();
+    return res.data.message;
   },
 
-  // Function for fetching authenticated user details from the server
-  fetchAuthUser: async () => {
-    const response = await fetch(`${baseURL}/users`, {
-      headers: { Authorization: localStorage.getItem('token') },
-    });
-
-    const { status: code } = response;
-
-    // If token is missing or invalid, remove token and display error message
-    if (code === 401) {
-      unsetAuthToken();
-      return {
-        user: {},
-        status: 'expired',
-        error: 'Unauthorized, You must Login or Register',
-        message: 'Session for User has expired',
-      };
-    }
-
-    // If token is valid, return user data and message.
-    if (code === 200) {
-      const currentUser = await response.json();
-      return {
-        user: currentUser,
-        status: 'successfull',
-        error: null,
-        message: 'User is authenticated',
-      };
-    }
-    return null;
-  },
-
-  // Function for fetching all motorcycles from the server
-  fetchAllMotorcycles: async () => {
-    const response = await fetch(`${baseURL}/all_motorcycles`, {
-      headers: { Authorization: localStorage.getItem('token') },
-    });
-
-    const motorcycles = await response.json();
-
-    // Return all motorcycle data
-    return motorcycles;
-  },
-
-  fetchAvailableMotorcycles: async () => {
-    const response = await fetch(`${baseURL}/motorcycles`);
-    console.log(response);
-    const motorcycle = await response.json();
-    return motorcycle;
-  },
-  fetchMotorcycles: async (id) => {
-    const response = await fetch(`${baseURL}/motorcycles/${id}`);
-    const motorcyle = response.json();
-    return motorcyle;
-  },
-  toggleMotorcycleAvailability: async (motorId, motor) => {
-    const response = await fetch(
-      `${baseURL}/motorcycles/${motorId}/availability`, {
-        ...toggleMotorcycleAvailabilityOptions(motor),
-      },
-    );
-
-    const data = await response.json();
-    return data;
-  },
-
-  addMotorcycle: async (motor) => {
-    const response = await fetch(`${baseURL}/motorcycles`, {
-      ...addMotorcycleOptions({ motor }),
-    });
-    const data = await response.json();
-    const { status: code } = response;
-    if (code === 422) {
-      return {
-        status: 'failed',
-        data: motor,
-        message: data.message,
-      };
-    }
-
-    return data;
-  },
-  reserveMotorcycle: async (userId, reservations) => {
-    const response = await fetch(`${baseURL}/users/${userId}/reservation`, {
-      ...motorcycleReservationOptions({ reservations }),
-    });
-    const reservation = await response.json();
-    return reservation;
-  },
-  fetchReservations: async (userId) => {
-    const response = await fetch(`${baseURL}/users/${userId}/reservations`, {
-      headers: { Authorization: localStorage.getItem('token') },
-    });
-    const reservations = await response.json();
-    return reservations;
-  },
-  deleteReservation: async (userId, reservationId) => {
-    const response = await fetch(
-      `${baseURL}/users/${userId}/reservations/${reservationId}`,
-      {
-        ...removeReservationOptions(),
-      },
-    );
-    const data = await response.json();
-    return data;
+  getAuthUser: async () => {
+    const res = await api.get('/users');
+    return res.data;
   },
 };
 
-// Export the api object for use in other files/modules
-export default api;
+export const motorcycleAPI = {
+  getAll: async () => {
+    const res = await api.get('/all_motorcycles');
+    return res.data;
+  },
+
+  getAvailable: async () => {
+    const res = await api.get('/motorcycles', { headers: null });
+    return res.data;
+  },
+
+  getById: async (id) => {
+    const res = await api.get(`/motorcycles/${id}`);
+    return res.data;
+  },
+
+  toggleAvailability: async (id, data) => {
+    const res = await api.patch(`/motorcycles/${id}/availability`, JSON.stringify(data));
+    return res.data;
+  },
+
+  add: async (data) => {
+    const res = await api.post('/motorcycles', JSON.stringify(data));
+    return res.data;
+  },
+};
+
+export const reservationAPI = {
+  reserve: async (userId, data) => {
+    const res = await api.post(`/users/${userId}/reservations`, JSON.stringify(data));
+    return res.data;
+  },
+
+  getAll: async (userId) => {
+    const res = await api.get(`/users/${userId}/reservations`);
+    return res.data;
+  },
+
+  delete: async (userId, id) => {
+    const res = await api.delete(`/users/${userId}/reservations/${id}`);
+    return res.data;
+  },
+};

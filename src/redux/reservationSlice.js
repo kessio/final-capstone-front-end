@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { toggleAvailability } from './Auth/homeSlice';
-
-import api from '../api/api';
+import { reservationAPI } from '../api/api';
 
 // Actions
 const RESERVE_MOTORCYCLE = 'RESERVE_MOTORCYCLE';
@@ -18,7 +17,7 @@ export const reserveMotorcycle = createAsyncThunk(
   RESERVE_MOTORCYCLE,
   async ({ userId, reservation }) => {
     try {
-      return await api.reserveMotorcycle(userId, reservation);
+      return await reservationAPI.reserve(userId, reservation);
     } catch (error) {
       return error.message;
     }
@@ -28,7 +27,7 @@ export const getReservations = createAsyncThunk(
   GET_RESERVATIONS,
   async (userId) => {
     try {
-      return await api.fetchReservations(userId);
+      return await reservationAPI.getAll(userId);
     } catch (error) {
       return error.message;
     }
@@ -38,7 +37,7 @@ export const deleteReservation = createAsyncThunk(
   DELETE_RESERVATION,
   async ({ userId, reservationId }) => {
     try {
-      return await api.deleteReservation(userId, reservationId);
+      return await reservationAPI.delete(userId, reservationId);
     } catch (error) {
       return error.message;
     }

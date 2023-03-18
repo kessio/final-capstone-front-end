@@ -24,7 +24,7 @@ function App() {
 
   useEffect(() => {
     if (isTokenSet) dispatch(getAuthenticatedUser());
-  }, []);
+  }, [isTokenSet]);
 
   return (
     <div>
