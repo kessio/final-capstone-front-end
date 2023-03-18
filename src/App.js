@@ -6,9 +6,7 @@ import Home from './components/Home';
 import DetailsPage from './components/detailsPage';
 import ReserveMotorcycle from './components/ReserveMotorcycle';
 import MyReservations from './components/MyReservations';
-import AddMotorcycle from './components/AddMotorcycle';
 import Signup from './components/user_auth/Signup';
-import DeleteMotorcycle from './components/DeleteMotorcycle';
 import Login from './components/user_auth/Login';
 import { getAvailableMotorcycle } from './redux/Auth/homeSlice';
 import useToken from './redux/Auth/useToken';
@@ -36,8 +34,6 @@ function App() {
         <Route path="/Login" element={<Login />} />
         <Route path="/reserve" element={<ReserveMotorcycle />} />
         <Route path="/myreservations" element={<MyReservations />} />
-        <Route path="/additem" element={<AddMotorcycle />} />
-        <Route path="/deleteitem" element={<DeleteMotorcycle />} />
       </Routes>
     </div>
   );

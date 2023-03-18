@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motorcycle, getMotorcycle } from '../redux/Auth/homeSlice';
 
-const DetailsPage = () => {
+function DetailsPage() {
   const { id } = useParams();
   const motorcycleDetails = useSelector(motorcycle);
   const dispatch = useDispatch();
@@ -58,6 +58,6 @@ const DetailsPage = () => {
       </div>
     </div>
   );
-};
+}
 
 export default DetailsPage;
