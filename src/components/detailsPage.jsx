@@ -1,17 +1,12 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { motorcycle, getMotorcycle } from '../redux/Auth/homeSlice';
 
 function DetailsPage() {
   const { id } = useParams();
   const motorcycleDetails = useSelector(motorcycle);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const handleReserve = () => {
-    navigate('/reserve');
-  };
 
   useEffect(() => {
     dispatch(getMotorcycle(id));
@@ -49,8 +44,8 @@ function DetailsPage() {
                 <h2 className="text-lg font-medium">Description:</h2>
                 <p>{motorcycleDetails.description}</p>
               </div>
-              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onClick={handleReserve} type="button">
-                Reserve
+              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+              <Link to={`/reserve/${id}`}>Reserve</Link>
               </button>
             </div>
           </div>
