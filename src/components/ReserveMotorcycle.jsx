@@ -33,15 +33,15 @@ function ReserveMotorcycle() {
   const user = useUser();
   const dispatch = useDispatch();
 
-  const [userId, setUserId] = useState('');
-  const [motorcycle_id, setMotorcycleId] = useState(id);
+  //const [userId, setUserId] = useState('');
+  const [motocycle_id, setMotorcycleId] = useState(id);
   const [start_time, setStartTime] = useState('');
   const [end_time, setEndTime] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const reservationData = { userId:user.id, motorcycle_id, start_time, end_time };
-    dispatch(reserveItem({ userId: user.id, reservationData }))
+    const reservationData = { start_time, end_time, motocycle_id, };
+    dispatch(reserveItem({user_id:user.id, reservationData }))
     setStartTime('');
     setEndTime('');
   };
@@ -75,7 +75,7 @@ function ReserveMotorcycle() {
                     type="hidden"
                     name="motorcycle_id"
                     id="motorcycle_id"
-                    value={motorcycle_id}
+                    value={motocycle_id}
                     required
                   />
                 </label>
@@ -95,6 +95,7 @@ function ReserveMotorcycle() {
                         value={start_time}
                         onChange={(event) => setStartTime(event.target.value)}
                         required
+                        placeholder='yyyy/mm/dd'
                         className="block w-full flex-1
                     rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset
                   ring-gray-300 sm:text-sm sm:leading-6"
@@ -117,6 +118,7 @@ function ReserveMotorcycle() {
                         value={end_time}
                         onChange={(event) => setEndTime(event.target.value)}
                         required
+                        placeholder='yyyy/mm/dd'
                         className="block w-full flex-1
                     rounded-none rounded-r-md border-0 py-1.5 text-gray-900 ring-1 ring-inset
                   ring-gray-300 sm:text-sm sm:leading-6"
