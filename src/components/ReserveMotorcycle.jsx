@@ -28,27 +28,20 @@ function useUser() {
   return user;
 }
 
-function useInput(initialValue) {
-  const [value, setValue] = useState(initialValue);
-  const handleChange = (event) => setValue(event.target.value);
-  return [value, handleChange];
-}
-
 function ReserveMotorcycle() {
   const { id } = useParams();
   const user = useUser();
   const dispatch = useDispatch();
 
-  const [user_id, setUserId] = useInput('');
-  const [motorcycle_id, setMotorcycleId] = useInput('');
-  const [start_time, setStartTime] = useInput('');
-  const [end_time, setEndTime] = useInput('');
+  const [userId, setUserId] = useState('');
+  const [motorcycle_id, setMotorcycleId] = useState(id);
+  const [start_time, setStartTime] = useState('');
+  const [end_time, setEndTime] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(reserveItem({ user_id, motorcycle_id, start_time, end_time }));
-    setUserId('');
-    setMotorcycleId('');
+    const reservationData = { userId:user.id, motorcycle_id, start_time, end_time };
+    dispatch(reserveItem({ userId: user.id, reservationData }))
     setStartTime('');
     setEndTime('');
   };
@@ -56,15 +49,10 @@ function ReserveMotorcycle() {
   if (!user) {
     return null;
   }
-  
-
-  //const handleReserve = () => {
-    //dispatch(reserveItem(userId));
- // };
   return (
     <div>
-       <h2>User ID: {user.id}</h2>
-       <h2>motorcycle id: {id}</h2>
+       <h2>User ID: {user.id} </h2>
+       <h2>motorcycle id: {id} </h2>
        <div className="md:grid md:grid-cols-3 md:gap-6 md:ml-60">
         <div className="mt-5 md:col-span-2 md:mt-5">
           <form onSubmit={handleSubmit}>
@@ -72,28 +60,25 @@ function ReserveMotorcycle() {
               <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
                 <div className="grid grid-cols-3 gap-6">
                    
-                   <label htmlFor='user_id'>
-                   <input
-                        type="text"
-                        name="user_id"
-                        id="user_id"
-                        value={user_id}
-                        onChange={(event) => setUserId(event.target.value)}
-                        required
-                        />
-
-                   </label>
-                   <label htmlFor='motorcycle_id'>
-                   <input
-                        type="text"
-                        name="motorcycle_id"
-                        id="motorcycle_id"
-                        value={motorcycle_id}
-                        onChange={(event) => setMotorcycleId(event.target.value)}
-                        required
-                        />
-
-                   </label>
+                <label htmlFor='user_id'>
+                <input
+                  type="hidden"
+                  name="user_id"
+                  id="user_id"
+                  defaultValue={user ? user.id : ''}
+                  required
+                />
+                </label>
+                    
+                <label htmlFor='motorcycle_id'>
+                  <input
+                    type="hidden"
+                    name="motorcycle_id"
+                    id="motorcycle_id"
+                    value={motorcycle_id}
+                    required
+                  />
+                </label>
 
                   <div className="col-span-3 sm:col-span-2">
                     <label

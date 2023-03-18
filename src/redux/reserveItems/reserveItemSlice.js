@@ -7,9 +7,10 @@ const token = localStorage.getItem('token');
 export const reserveItem = createAsyncThunk(
   'item/reserveItem',
   async ({ userId, reservationData }) => {
-    const url = `${API_BASE_URL}/users/${userId}/reservations`;
+    const url = `${API_BASE_URL}/users/:${userId}/reservations`;
     const headers = { Authorization: `Bearer ${token}` };
     const response = await axios.post(url, reservationData, { headers });
+    console.log(response.data)
     return response.data;
   }
 );
